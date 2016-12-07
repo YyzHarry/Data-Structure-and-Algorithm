@@ -1,55 +1,46 @@
 #include<iostream>
 #include<algorithm>
-#include<map>
 using namespace std;
 
-map<char,int> m;
-int n, flag=0, a[10000000]={0};
-string str;
+const int MAX = 500001;
+int t[MAX], a[MAX];
+long long ans;
 
-int trans(string s)
+void merge(int *a,int left,int mid,int right)
 {
-    int l = s.length(), tmp=0;
-    for(int i=0;i<l;i++)
-        if(isalnum(s[i])){
-            if(s[i]>='0' && s[i]<='9'){
-                tmp *= 10;
-                tmp += s[i] -'0';
-            }
-            else{
-                tmp *= 10;
-                tmp += m[s[i]];
-            }
+    int l=left, r=mid+1, now=0;
+    while(l<=mid && r<=right){
+        if(a[l] > a[r]){
+            t[now++] = a[r++];
+            ans += mid-l+1;
         }
-    return tmp;
+        else t[now++] = a[l++];
+    }
+    while(l<=mid) t[now++] = a[l++];
+    while(r<=right) t[now++] = a[r++];
+    for(int i=0;i<now;i++)
+        a[left+i] = t[i];
 }
 
-void print(int x)
+void merge_sort(int *a,int left,int right)
 {
-    for(int i=1000000;i>=1;i/=10){
-        cout<<x/i;
-        x %= i;
-        if(i == 10000) cout<<"-";
+    if(left < right){
+        int mid = (left + right)/2;
+        merge_sort(a,left,mid);
+        merge_sort(a,mid+1,right);
+        merge(a,left,mid,right);
     }
 }
 
 int main()
 {
-    m['A']=m['B']=m['C']=2, m['D']=m['E']=m['F']=3, m['G']=m['H']=m['I']=4,
-    m['J']=m['K']=m['L']=5, m['M']=m['N']=m['O']=6, m['P']=m['R']=m['S']=7,
-    m['T']=m['U']=m['V']=8, m['W']=m['X']=m['Y']=9;
-    cin>>n;
-    while(n--){
-        cin>>str;
-        a[trans(str)]++;
+    int n;
+    while(cin>>n && n){
+        ans = 0;
+        for(int i=1;i<=n;i++)
+            cin>>a[i];
+        merge_sort(a,1,n);
+        cout<<ans<<endl;
     }
-    for(int i=0;i<10000000;i++){
-        if(a[i] > 1){
-            flag=1;
-            print(i);
-            cout<<" "<<a[i]<<endl;
-        }
-    }
-    if(!flag) cout<<"No duplicates."<<endl;
     return 0;
 }
