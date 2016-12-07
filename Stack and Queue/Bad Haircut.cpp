@@ -1,3 +1,5 @@
+//Monotonic Queue
+
 #include<iostream>
 using namespace std;
 int q[80001], rear=-1, input, n;
