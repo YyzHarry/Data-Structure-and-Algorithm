@@ -42,7 +42,7 @@ int main()
 
     for(int i = 1; i <= m; i++){
         scanf("%d %d %d %d",&s,&d,&l,&t);
-        struct node *tmp = (struct node *)malloc(sizeof(struct node));
+        struct node *tmp = new node;
         tmp->v = d;
         tmp->l = l;
         tmp->t = t;
